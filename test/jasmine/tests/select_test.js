@@ -10,40 +10,18 @@ var createGraphDiv = require('../assets/create_graph_div');
 var destroyGraphDiv = require('../assets/destroy_graph_div');
 var failTest = require('../assets/fail_test');
 var mouseEvent = require('../assets/mouse_event');
-var touchEvent = require('../assets/touch_event');
+var _drag = require('../assets/drag');
 
 var LONG_TIMEOUT_INTERVAL = 5 * jasmine.DEFAULT_TIMEOUT_INTERVAL;
 var delay = require('../assets/delay');
 var sankeyConstants = require('@src/traces/sankey/constants');
 
-function drag(path, options) {
-    var len = path.length;
-
-    if(!options) options = {type: 'mouse'};
-
-    Lib.clearThrottle();
-
-    if(options.type === 'touch') {
-        touchEvent('touchstart', path[0][0], path[0][1], options);
-
-        path.slice(1, len).forEach(function(pt) {
-            Lib.clearThrottle();
-            touchEvent('touchmove', pt[0], pt[1], options);
-        });
-
-        touchEvent('touchend', path[len - 1][0], path[len - 1][1], options);
-        return;
-    }
-
-    mouseEvent('mousemove', path[0][0], path[0][1], options);
-    mouseEvent('mousedown', path[0][0], path[0][1], options);
-
-    path.slice(1, len).forEach(function(pt) {
-        Lib.clearThrottle();
-        mouseEvent('mousemove', pt[0], pt[1], options);
-    });
-
-    mouseEvent('mouseup', path[len - 1][0], path[len - 1][1], options);
+function drag(path, _opts) {
+    var opts = {};
+    for(var k in _opts) opts[k] = _opts[k];
+    opts.path = path;
+    opts.clearThrottle = Lib.clearThrottle;
+    return _drag(opts);
 }
 
 function assertSelectionNodes(cornerCnt, outlineCnt, _msg) {
