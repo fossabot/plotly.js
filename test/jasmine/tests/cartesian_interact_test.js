@@ -329,7 +329,7 @@ describe('axis zoom/pan and main plot zoom', function() {
     function doDrag(subplot, directions, dx, dy, nsteps) {
         return function() {
             var dragger = getDragger(subplot, directions);
-            return drag(dragger, dx, dy, undefined, undefined, undefined, nsteps);
+            return drag({node: dragger, dpos: [dx, dy], nsteps: nsteps});
         };
     }
 
@@ -359,7 +359,7 @@ describe('axis zoom/pan and main plot zoom', function() {
 
     function makeDragFns(subplot, directions, dx, dy, x0, y0) {
         var dragger = getDragger(subplot, directions);
-        return drag.makeFns(dragger, dx, dy, {x0: x0, y0: y0});
+        return drag.makeFns({node: dragger, dpos: [dx, dy], pos0: [x0, y0]});
     }
 
     describe('subplots with shared axes', function() {
@@ -715,6 +715,26 @@ describe('axis zoom/pan and main plot zoom', function() {
         }
 
         Plotly.plot(gd, [{ y: [1, 2, 1] }])
+        .then(doDrag('xy', 'nsew', 50, 50))
+        .then(function() { _assert('after xy drag', [1, 1.208], [1.287, 1.5]); })
+        .then(doDblClick('xy', 'nsew'))
+        .then(doDrag('xy', 'nsew', 50, 0))
+        .then(function() { _assert('after x-only drag', [1, 1.208], [0.926, 2.073]); })
+        .then(doDblClick('xy', 'nsew'))
+        .then(doDrag('xy', 'nsew', 0, 50))
+        .then(function() { _assert('after y-only drag', [-0.128, 2.128], [1.287, 1.5]); })
+        .catch(failTest)
+        .then(done);
+    });
+
+    xit('handles y-only to xy back to y-only in single zoombox drag motion', function(done) {
+        function _assert(msg, xrng, yrng) {
+            expect(gd.layout.xaxis.range).toBeCloseToArray(xrng, 2, 'xrng - ' + msg);
+            expect(gd.layout.yaxis.range).toBeCloseToArray(yrng, 2, 'yrng - ' + msg);
+        }
+
+        Plotly.plot(gd, [{ y: [1, 2, 1] }])
+        .then(doDrag('xy', 'nsew', 0, 50))
         .then(doDrag('xy', 'nsew', 50, 50))
         .then(function() { _assert('after xy drag', [1, 1.208], [1.287, 1.5]); })
         .then(doDblClick('xy', 'nsew'))
