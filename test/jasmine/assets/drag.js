@@ -44,7 +44,7 @@ function makeFns(opts) {
     var dpos = opts.dpos || [];
     var path;
 
-    if(Array.isArray(opts.path) && opts.path.length > 2 &&
+    if(Array.isArray(opts.path) && opts.path.length >= 2 &&
         Array.isArray(opts.path[0]) && Array.isArray(opts.path[1])) {
         path = opts.path;
     } else {
