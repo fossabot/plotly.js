@@ -103,4 +103,6 @@ module.exports = function supplyDefaults(traceIn, traceOut, defaultColor, layout
 
     coerce('labelangle');
     coerce('labelposition');
+
+    coerce('dragline.color');
 };

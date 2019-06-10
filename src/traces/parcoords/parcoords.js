@@ -139,6 +139,7 @@ function model(layout, d, i) {
     var trace = cd0.trace;
     var lineColor = helpers.convertTypedArray(cd0.lineColor);
     var line = trace.line;
+    var dragLine = {color: rgba(trace.dragline.color)};
     var cOpts = Colorscale.extractOpts(line);
     var cscale = cOpts.reversescale ? Colorscale.flipScale(cd0.cscale) : cd0.cscale;
     var domain = trace.domain;
@@ -174,6 +175,7 @@ function model(layout, d, i) {
         tickDistance: c.tickDistance,
         unitToColor: unitToColorScale(cscale),
         lines: lines,
+        dragLine: dragLine,
         labelAngle: labelAngle,
         labelPosition: labelPosition,
         labelFont: labelFont,

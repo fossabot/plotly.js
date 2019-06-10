@@ -180,6 +180,8 @@ function makeItem(model, leftmost, rightmost, itemNumber, i0, i1, x, y, panelSiz
     var canvasWidth = model.canvasWidth;
     var canvasHeight = model.canvasHeight;
 
+    var dragLineColor = model.dragLine.color;
+
     var itemModel = Lib.extendFlat({
         key: crossfilterDimensionIndex,
         resolution: [canvasWidth, canvasHeight],
@@ -199,10 +201,12 @@ function makeItem(model, leftmost, rightmost, itemNumber, i0, i1, x, y, panelSiz
 
         drwLayer: drwLayer,
         contextColor: [
-            119 / 255,
-            119 / 255,
-            119 / 255,
-            Math.max(1 / 255, Math.pow(1 / model.lines.color.length, 1 / 3))
+            dragLineColor[0] / 255,
+            dragLineColor[1] / 255,
+            dragLineColor[2] / 255,
+            (dragLineColor[3] < 1) ?
+                dragLineColor[3] :
+                Math.max(1 / 255, Math.pow(1 / model.lines.color.length, 1 / 3))
         ],
 
         scissorX: (itemNumber === leftmost ? 0 : x + overdrag) + (model.pad.l - overdrag) + model.layoutWidth * domain.x[0],
@@ -348,7 +352,9 @@ module.exports = function(canvasGL, d) {
         sampleCount = initialDims[0] ? initialDims[0].values.length : 0;
 
         var lines = model.lines;
-        var color = isPick ? lines.color.map(function(_, i) {return i / (lines.color.length - 1);}) : lines.color;
+        var color = !isPick ? lines.color : lines.color.map(function(_, i) {
+            return i / lines.color.length;
+        });
 
         var points = makePoints(sampleCount, initialDims, color);
         setAttributes(attributes, sampleCount, points);

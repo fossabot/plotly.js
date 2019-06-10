@@ -17,6 +17,9 @@
                 "family": "'Open sans', verdana, arial, sans-serif",
                 "size": 12
             },
+            "dragline": {
+                "color": "rgba(255, 127, 0, 0.5)"
+            },
             "dimensions": [
                 {
                     "label": "<i>Rien ne se perd,<br>rien ne se crée,<br>tout se <b>transforme</b>.</i><sub>",

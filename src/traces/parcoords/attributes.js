@@ -154,5 +154,22 @@ module.exports = {
             autoColorDflt: false,
             editTypeOverride: 'calc'
         })
-    )
+    ),
+
+    dragline: {
+        color: {
+            valType: 'color',
+            dflt: '#777',
+            role: 'style',
+            editType: 'plot',
+            description: [
+                'Sets color for unselected/background lines.',
+                'If this color has no opacity (alpha equal to 255),',
+                'the opacity is auto computed from the number of lines.',
+                'On the other hand other desirable opacity levels could be',
+                'applied to by having an explicit alpha. Obviously zero can',
+                'be used to hide the lines.'
+            ].join(' ')
+        }
+    }
 };
